@@ -246,21 +246,11 @@ static int catch_audio(struct uprobe *uprobe, struct upipe *upipe,
                              UPROBE_LOG_VERBOSE, "play audio"));
 
     struct upipe *sink;
-#ifdef UPIPE_HAVE_ALSA_ASOUNDLIB_H
-    struct upipe_mgr *upipe_alsink_mgr = upipe_alsink_mgr_alloc();
-    sink = upipe_void_alloc(upipe_alsink_mgr,
-            uprobe_pfx_alloc(uprobe_use(uprobe_main), UPROBE_LOG_VERBOSE,
-                             "alsink"));
-    assert(sink != NULL);
-    upipe_mgr_release(upipe_alsink_mgr);
-    upipe_attach_uclock(sink);
-#else
     struct upipe_mgr *upipe_null_mgr = upipe_null_mgr_alloc();
     sink = upipe_void_alloc(upipe_null_mgr,
             uprobe_pfx_alloc(uprobe_use(uprobe_main), UPROBE_LOG_VERBOSE,
                              "null"));
     upipe_mgr_release(upipe_null_mgr);
-#endif
 
     /* deport to the sink thread */
     sink = upipe_wsink_alloc(upipe_wsink_mgr,
